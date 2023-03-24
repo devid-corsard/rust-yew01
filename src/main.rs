@@ -20,7 +20,8 @@ fn App() -> Html {
         use_effect_with_deps(
             move |_| {
                 wasm_bindgen_futures::spawn_local(async move {
-                    let fetched_users = Request::get("https://dummyjson.com/users").send().await;
+                    let fetched_users = Request::get("https://randomuser.me/api/?results=45").send().await;
+                    println!("hello");
                     match fetched_users {
                         Ok(response) => {
                             let json = response.json::<Users>().await;
@@ -41,15 +42,15 @@ fn App() -> Html {
     }
 
     let user_list_logic = match users.as_ref() {
-        Some(users) => users.users.iter().map(|user| {
+        Some(users) => users.results.iter().map(|user| {
             html! {
                 <Card user={user.clone()} />
             }
         }).collect(),
         None => match error.as_ref() {
-            Some(_) => {
+            Some(e) => {
                 html! {
-                    <Message text={"Error getting list of users"} css_class={"text-danger"} />
+                    <Message text={format!("Error getting list of users\n Error: {}", e)} css_class={"text-danger"} />
                 }
             },
             None => {

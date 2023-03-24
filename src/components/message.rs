@@ -8,8 +8,8 @@ pub struct MessageProp {
 #[function_component]
 pub fn Message(MessageProp { text, css_class }: &MessageProp) -> Html{
     html! {
-        <p class={css_class.clone()}>
-            {text.clone()}
+        <p class={css_class}>
+            {text}
         </p>
     }
 
